@@ -1,0 +1,151 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Wapp</title>
+
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #tabsBar {
+            width: 100%;
+            height: 21px;
+        }
+
+        #tabLabels {
+            display: table;
+            table-layout: fixed;
+            width: calc(100% - 42px);
+            height: 100%;
+            float: left;
+        }
+
+        .tab {
+            display: table-cell;
+            height: 100%;
+        }
+
+        a.tab {
+            text-align: center;
+            color: black;
+            text-decoration: none;
+            overflow: hidden;
+            white-space: nowrap;
+            border-left: 1px solid black;
+            border-right: 9px solid white;
+            padding-left: 9px;
+        }
+
+        #webViewBar {
+            width: 100%;
+            flex-grow: 1;
+        }
+
+        .webView {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+        }
+
+        #progressBar {
+            background-color: Highlight;
+            width: 100%;
+            height: 3px;
+        }
+
+        #frequencyBar {
+            width: 100%;
+            height: auto;
+            max-height: 50%;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .frequencyItem {
+            white-space: nowrap;
+            color: black;
+        }
+
+        #navigationBar {
+            width: 100%;
+            height: 21px;
+        }
+
+        #addressBar {
+            width: calc(100% - 42px);
+            float: left;
+        }
+
+        #addressField {
+            width: 100%;
+            border: none;
+        }
+
+        #popup {
+            position: absolute;
+            left: 10%;
+            top: 10%;
+            width: 80%;
+            height: 80%;
+            border: solid 1px black;
+            background-color: white;
+        }
+
+        .popupField {
+            width: 100%;
+            height: calc(50% - 11px);
+            border: none;
+            border-bottom: solid 1px black;
+            padding: 0px;
+        }
+
+        #filterLabel {
+            width: calc(100% - 42px);
+            float: left;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+            a.button {
+                width: 21px;
+                float: left;
+                margin-top: -2px;
+                text-align: center;
+                font-weight: 900;
+                color: black;
+                font-size: 20px;
+            }
+    </style>
+
+</head>
+<body>
+    <script type="text/javascript" src="js/main.js"></script>
+    <div id="tabsBar">
+        <div id="tabLabels"></div>
+        <a class="button" id="addTab" href="#">+</a>
+        <a class="button" id="viewFilter" href="#">⦠</a>
+    </div>
+    <div id="webViewBar"></div>
+    <div id="progressBar"></div>
+    <div id="frequencyBar"></div>
+    <div id="navigationBar">
+        <a class="button" id="backButton" href="#">&lt;</a>
+        <form id="addressBar">
+            <input id="addressField" type="text" name="addressField" />
+        </form>
+        <a class="button" id="forwardButton" href="#">&gt;</a>
+    </div>
+    <div id="popup" hidden="hidden">
+        <textarea class="popupField" id="violationField"></textarea>
+        <textarea class="popupField" id="filterField"></textarea>
+        <div id="filterLabel">Edit filter policy to allow or reject external content</div>
+        <a class="button" id="saveFilter" href="#">⤓</a>
+        <a class="button" id="closePopup" href="#">⨉</a>
+    </div>
+</body>
+</html>
