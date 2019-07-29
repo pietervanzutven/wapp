@@ -84,7 +84,8 @@
             border: none;
         }
 
-        #popup {
+        #filter {
+            display: none;
             position: absolute;
             left: 10%;
             top: 10%;
@@ -94,7 +95,7 @@
             background-color: white;
         }
 
-        .popupField {
+        .filterField {
             width: 100%;
             height: calc(50% - 11px);
             border: none;
@@ -140,12 +141,12 @@
         </form>
         <a class="button" id="forwardButton" href="#">&gt;</a>
     </div>
-    <div id="popup" hidden="hidden">
-        <textarea class="popupField" id="violationField"></textarea>
-        <textarea class="popupField" id="filterField"></textarea>
+    <div id="filter">
+        <textarea class="filterField" id="violationField"></textarea>
+        <textarea class="filterField" id="filterField"></textarea>
         <div id="filterLabel">Edit filter policy to allow external content</div>
         <a class="button" id="saveFilter" href="#">⤓</a>
-        <a class="button" id="closePopup" href="#">⨉</a>
+        <a class="button" id="closeFilter" href="#">⨉</a>
     </div>
 </body>
 </html>

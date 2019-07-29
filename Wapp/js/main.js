@@ -98,7 +98,7 @@ window.onload = () => {
     }
 
     function navigate(url) {
-        callExtended(() => activeTab.webView.navigate(url ));
+        callExtended(() => activeTab.webView.navigate(url));
     }
 
     function activateTab(tab) {
@@ -144,7 +144,7 @@ window.onload = () => {
             label === activeTab.label && (addressField.value = event.uri || 'about:blank');
             progressBar.style.width = '0%';
         });
-        
+
         webView.addEventListener('MSWebViewContentLoading', event => {
             var uri = Windows.Foundation.Uri(webView.src || 'about:blank');
             var domain = uri.domain;
@@ -196,7 +196,7 @@ window.onload = () => {
             var uri = Windows.Foundation.Uri(activeTab.webView.src);
             violationField.value = (event.target.result || '').replace(/,/g, '\n');
             filterField.value = filterList;
-            popup.hidden = '';
+            filter.style.display = 'block';
         };
         op.start();
     });
@@ -204,19 +204,15 @@ window.onload = () => {
     saveFilter.addEventListener('click', () => {
         Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
             .then(file => {
-                return Windows.Storage.FileIO.writeTextAsync(file, filterField.value)
+                Windows.Storage.FileIO.writeTextAsync(file, filterField.value)
                     .then(() => {
-                        popup.hidden = 'hidden';
+                        filter.style.display = 'none';
                         loadFilter(file);
-                    }, error => {
-                        console.log(error)
-                    })
-            }, error => {
-                console.log(error)
+                    });
             });
     });
 
-    closePopup.addEventListener('click', () => popup.hidden = 'hidden');
+    closeFilter.addEventListener('click', () => filter.style.display = 'none');
 
     addressBar.addEventListener('submit', event => {
         event.preventDefault();
