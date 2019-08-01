@@ -65,7 +65,7 @@ window.onload = () => {
     function loadFilter(file) {
         Windows.Storage.FileIO.readTextAsync(file).then(text => {
             filterList = text;
-            var lines = text.split('\r\n');
+            var lines = text.split(/[\r\n]+/);
             lines.forEach(
                 line => {
                     var result = line.split(' ');
