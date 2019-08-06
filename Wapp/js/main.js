@@ -58,6 +58,8 @@ window.onload = () => {
 
     Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
 
+    Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => addressField.select());
+
     var extendedExecution = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionSession();
     extendedExecution.reason = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionReason.unspecified;
     extendedExecution.addEventListener('revoked', () => activeTab.webView.stop());
@@ -83,7 +85,6 @@ window.onload = () => {
     function browse(url) {
         activeTab.webView.stop();
         activeTab.webView.focus();
-        Windows.UI.ViewManagement.InputPane.getForCurrentView().tryHide();
 
         url = url.trim().replace('https://', '').replace('http://', '').replace(/\/$/, '');
         if (url.includes('.') && !url.includes(' ')) {
@@ -219,11 +220,7 @@ window.onload = () => {
         browse(addressField.value);
     });
 
-    addressField.addEventListener('focus', event => {
-        setTimeout(event.target.select.bind(event.target), 0);
-        addressField.select();
-        Windows.UI.ViewManagement.InputPane.getForCurrentView().tryShow();
-    });
+    addressField.addEventListener('focus', event => setTimeout(event.target.select.bind(event.target), 0));
 
     addressField.addEventListener('keydown', event => {
         frequencyBar.innerHTML = '';
