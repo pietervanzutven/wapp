@@ -58,7 +58,10 @@ window.onload = () => {
 
     Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
 
-    Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => addressField.select());
+    Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
+        addressField.selectionStart = 0;
+        addressField.selectionEnd = addressField.value.length;
+    });
 
     var extendedExecution = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionSession();
     extendedExecution.reason = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionReason.unspecified;
