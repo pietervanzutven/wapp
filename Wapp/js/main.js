@@ -203,7 +203,6 @@ window.onload = () => {
     viewFilter.addEventListener('click', () => {
         var op = activeTab.webView.invokeScriptAsync('eval', 'window.violations.toString()');
         op.oncomplete = function (event) {
-            var uri = Windows.Foundation.Uri(activeTab.webView.src);
             violationField.value = (event.target.result || '').replace(/,/g, '\n');
             filterField.value = filterList;
             filter.style.display = 'block';
