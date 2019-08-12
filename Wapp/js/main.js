@@ -257,7 +257,7 @@ window.onload = () => {
                         var div = document.createElement('div');
                         link.href = '#';
                         link.addEventListener('click', () => browse(url));
-                        link.addEventListener('dblclick', () => {
+                        link.addEventListener('contextmenu', () => {
                             delete frequencyList[url];
                             link.remove();
                         });
