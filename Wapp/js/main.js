@@ -63,6 +63,8 @@ window.onload = () => {
         addressField.selectionEnd = addressField.value.length;
     });
 
+    Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('hiding', () => frequencyBar.innerHTML = '');
+
     var extendedExecution = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionSession();
     extendedExecution.reason = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionReason.unspecified;
     extendedExecution.addEventListener('revoked', () => activeTab.webView.stop());
