@@ -203,7 +203,7 @@ window.onload = () => {
     viewFilter.addEventListener('click', () => {
         var op = activeTab.webView.invokeScriptAsync('eval', 'window.violations.toString()');
         op.oncomplete = function (event) {
-            violationField.value = (event.target.result || '').replace(/,/g, '\n');
+            violationField.value = [...new Set((event.target.result || '').split(','))].join('\n');
             filterField.value = filterList;
             filter.style.display = 'block';
         };
