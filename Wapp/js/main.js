@@ -122,7 +122,7 @@ window.onload = () => {
         var tab = { label: createLabel(), webView: [] };
         tab.webView = createWebView(tab.label);
         tab.label.addEventListener('click', () => activateTab(tab));
-        tab.label.addEventListener('dblclick', () => {
+        tab.label.addEventListener('contextmenu', () => {
             if (tabs.length > 1) {
                 tab.label.remove();
                 tabs.splice(tabs.indexOf(tab), 1);
