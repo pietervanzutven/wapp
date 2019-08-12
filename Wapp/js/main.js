@@ -82,6 +82,10 @@ window.onload = () => {
         });
     }
 
+    function saveFrequency() {
+        Windows.Storage.ApplicationData.current.localFolder.createFileAsync('frequent.json', Windows.Storage.CreationCollisionOption.replaceExisting).then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(frequencyList)));
+    }
+
     function callExtended(callback) {
         extendedExecution.close();
         extendedExecution.requestExtensionAsync().then(() => callback());
@@ -94,7 +98,7 @@ window.onload = () => {
         url = url.trim().replace('https://', '').replace('http://', '').replace(/\/$/, '');
         if (url.includes('.') && !url.includes(' ')) {
             frequencyList[url] = frequencyList[url] + 1 || 1;
-            Windows.Storage.ApplicationData.current.localFolder.createFileAsync('frequent.json', Windows.Storage.CreationCollisionOption.replaceExisting).then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(frequencyList)));
+            saveFrequency();
             url = 'http://' + url;
         }
         else {
@@ -260,6 +264,7 @@ window.onload = () => {
                         link.addEventListener('contextmenu', () => {
                             delete frequencyList[url];
                             link.remove();
+                            saveFrequency();
                         });
                         div.className = 'frequencyItem';
                         div.innerHTML = url;
