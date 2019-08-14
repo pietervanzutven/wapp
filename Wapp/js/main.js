@@ -159,7 +159,7 @@ window.onload = () => {
             var uri = Windows.Foundation.Uri(webView.src || 'about:blank');
             var domain = uri.domain;
             var csp = 'http://' + domain + ':* http://*.' + domain + ':* https://' + domain + ':* https://*.' + domain + ':* ' + ' wss://' + domain + ':* wss://*.' + domain + ':* ' + (cspList[domain] || '');
-            csp = JSON.stringify("default-src " + csp + ";style-src 'unsafe-inline' " + csp + ";script-src 'unsafe-inline' 'unsafe-eval' " + csp + ";");
+            csp = JSON.stringify("default-src " + csp + ";style-src 'unsafe-inline' " + csp + ";script-src 'unsafe-inline' 'unsafe-eval' " + csp + ";worker-src " + "blob:;");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
             webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " - " + e.blockedURI))').start();
             frequencyBar.innerHTML = '';
