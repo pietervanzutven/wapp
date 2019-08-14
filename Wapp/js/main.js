@@ -161,7 +161,7 @@ window.onload = () => {
             var csp = 'http://' + domain + ':* http://*.' + domain + ':* https://' + domain + ':* https://*.' + domain + ':* ' + ' wss://' + domain + ':* wss://*.' + domain + ':* ' + (cspList[domain] || '');
             csp = JSON.stringify("default-src " + csp + ";style-src 'unsafe-inline' " + csp + ";script-src 'unsafe-inline' 'unsafe-eval' " + csp + ";");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
-            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.blockedURI))').start();
+            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " - " + e.blockedURI))').start();
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || webView.src;
             progressBar.style.width = '33%';
