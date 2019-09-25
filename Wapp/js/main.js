@@ -31,18 +31,14 @@ window.onload = () => {
     keyCodes[221] = ']';
     keyCodes[222] = "'";
 
-    var filterList = '';
     var cspList = {};
     Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
-        .then(file => {
-            loadFilter(file);
-        }, () => {
-            Windows.Storage.StorageFile.getFileFromApplicationUriAsync(Windows.Foundation.Uri('ms-appx:///filterlist.txt'))
-                .then(file => {
-                    loadFilter(file);
-                    file.copyAsync(Windows.Storage.ApplicationData.current.localFolder);
-                })
-        })
+        .then(file => loadFilter(file), () => Windows.Storage.StorageFile.getFileFromApplicationUriAsync(Windows.Foundation.Uri('ms-appx:///filterlist.txt'))
+            .then(file => {
+                loadFilter(file);
+                file.copyAsync(Windows.Storage.ApplicationData.current.localFolder);
+            })
+        )
 
     var frequencyList = {};
     Windows.Storage.ApplicationData.current.localFolder.getFileAsync('frequent.json')
@@ -59,8 +55,8 @@ window.onload = () => {
     Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
-        addressField.selectionStart = 0;
-        addressField.selectionEnd = addressField.value.length;
+            addressField.selectionStart = 0;
+            addressField.selectionEnd = addressField.value.length;
     });
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('hiding', () => frequencyBar.innerHTML = '');
@@ -70,16 +66,7 @@ window.onload = () => {
     extendedExecution.addEventListener('revoked', () => activeTab.webView.stop());
 
     function loadFilter(file) {
-        Windows.Storage.FileIO.readTextAsync(file).then(text => {
-            filterList = text;
-            var lines = text.split(/[\r\n]+/);
-            lines.forEach(
-                line => {
-                    var result = line.split(' ');
-                    cspList[result[0]] = (cspList[result[0]] || '') + ' ' + 'http://' + result[1] + ':* http://*.' + result[1] + ':* https://' + result[1] + ':* https://*.' + result[1] + ':* wss://' + result[1] + ':* wss://*.' + result[1] + ':*';
-                }
-            );
-        });
+        Windows.Storage.FileIO.readTextAsync(file).then(text => cspList = JSON.parse(text));
     }
 
     function saveFrequency() {
@@ -156,12 +143,9 @@ window.onload = () => {
         });
 
         webView.addEventListener('MSWebViewContentLoading', event => {
-            var uri = Windows.Foundation.Uri(webView.src || 'about:blank');
-            var domain = uri.domain;
-            var csp = 'http://' + domain + ':* http://*.' + domain + ':* https://' + domain + ':* https://*.' + domain + ':* ' + ' wss://' + domain + ':* wss://*.' + domain + ':* ' + (cspList[domain] || '');
-            csp = JSON.stringify("default-src " + csp + ";style-src 'unsafe-inline' " + csp + ";script-src 'unsafe-inline' 'unsafe-eval' " + csp + ";worker-src " + "blob:;");
+            var csp = JSON.stringify(cspList[Windows.Foundation.Uri(webView.src || 'about:blank').domain] || "default-src 'none';");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
-            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " - " + e.blockedURI))').start();
+            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + e.blockedURI + ";"))').start();
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || webView.src;
             progressBar.style.width = '33%';
@@ -204,21 +188,18 @@ window.onload = () => {
         var op = activeTab.webView.invokeScriptAsync('eval', 'window.violations.toString()');
         op.oncomplete = function (event) {
             violationField.value = [...new Set((event.target.result || '').split(','))].join('\n');
-            filterField.value = filterList;
+            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'none';").replace(/;/g, ';\n');
             filter.style.display = 'block';
         };
         op.start();
     });
 
     saveFilter.addEventListener('click', () => {
+        cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/\n/g, '');
         Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
-            .then(file => {
-                Windows.Storage.FileIO.writeTextAsync(file, filterField.value)
-                    .then(() => {
-                        filter.style.display = 'none';
-                        loadFilter(file);
-                    });
-            });
+            .then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(cspList))
+                .then(() => filter.style.display = 'none')
+            );
     });
 
     closeFilter.addEventListener('click', () => filter.style.display = 'none');
