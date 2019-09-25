@@ -55,8 +55,10 @@ window.onload = () => {
     Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
+        if (addressField.hasFocus) {
             addressField.selectionStart = 0;
             addressField.selectionEnd = addressField.value.length;
+        }
     });
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('hiding', () => frequencyBar.innerHTML = '');
