@@ -55,9 +55,9 @@ window.onload = () => {
     Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
-        if (addressField.hasFocus) {
-            addressField.selectionStart = 0;
-            addressField.selectionEnd = addressField.value.length;
+    if (addressField.hasFocus) {
+        addressField.selectionStart = 0;
+        addressField.selectionEnd = addressField.value.length;
         }
     });
 
@@ -189,7 +189,18 @@ window.onload = () => {
     viewFilter.addEventListener('click', () => {
         var op = activeTab.webView.invokeScriptAsync('eval', 'window.violations.toString()');
         op.oncomplete = function (event) {
-            violationField.value = [...new Set((event.target.result || '').split(','))].join('\n');
+            violationField.innerHTML = '';
+            var violations = [...new Set((event.target.result || '').split(','))];
+            violations.forEach(violation => {
+                var link = document.createElement('a');
+                var div = document.createElement('div');
+                link.href = '#';
+                link.addEventListener('click', () => filterField.value += violation + '\n');
+                div.className = 'frequencyItem';
+                div.innerHTML = violation;
+                link.appendChild(div);
+                violationField.appendChild(link);
+            })
             filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'none';").replace(/;/g, ';\n');
             filter.style.display = 'block';
         };
