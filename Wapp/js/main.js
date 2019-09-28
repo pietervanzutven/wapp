@@ -147,7 +147,7 @@ window.onload = () => {
         webView.addEventListener('MSWebViewContentLoading', event => {
             var csp = JSON.stringify(cspList[Windows.Foundation.Uri(webView.src || 'about:blank').domain] || "default-src 'none';");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
-            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + e.blockedURI + ";"))').start();
+            webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + (e.blockedURI || (e.lineNumber ? "\'unsafe-inline\'" : "\'unsafe-eval\'")) + ";"))').start();
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || webView.src;
             progressBar.style.width = '33%';
