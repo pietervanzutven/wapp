@@ -112,8 +112,10 @@ window.onload = () => {
     }
 
     function createTab() {
-        var tab = { label: createLabel(), webView: [] };
-        tab.webView = createWebView(tab.label);
+        var label = createLabel();
+        var progress = createProgress();
+        var webView = createWebView(label, progress);
+        var tab = { label: label, progress: progress, webView: webView };
         tab.label.addEventListener('click', () => activateTab(tab));
         tab.label.addEventListener('contextmenu', () => {
             if (tabs.length > 1) {
@@ -122,7 +124,8 @@ window.onload = () => {
                 activateTab(tabs[0]);
             }
         });
-        tabLabels.appendChild(tab.label);
+        labels.appendChild(label);
+        progresses.appendChild(progress);
         activateTab(tab);
         return tab;
     };
@@ -130,18 +133,24 @@ window.onload = () => {
     function createLabel() {
         var label = document.createElement('a');
         label.href = '#';
-        label.className = 'tab';
+        label.className = 'label';
         label.innerHTML = 'New tab';
         return label;
     }
 
-    function createWebView(label) {
+    function createProgress() {
+        var progress = document.createElement('div');
+        progress.className = 'progress';
+        return progress;
+    }
+
+    function createWebView(label, progress) {
         var webView = document.createElement('x-ms-webview');
         webView.className = 'webView';
 
         webView.addEventListener('MSWebViewNavigationStarting', event => {
             label === activeTab.label && (addressField.value = event.uri || 'about:blank');
-            progressBar.style.width = '0%';
+            progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%)';
         });
 
         webView.addEventListener('MSWebViewContentLoading', event => {
@@ -150,12 +159,12 @@ window.onload = () => {
             webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + (e.blockedURI || (e.lineNumber ? "\'unsafe-inline\'" : "\'unsafe-eval\'")) + ";"))').start();
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || webView.src;
-            progressBar.style.width = '33%';
+            progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 33%, rgba(0,0,0,0) 33%, rgba(0,0,0,0) 100%)';
         });
 
-        webView.addEventListener('MSWebViewDOMContentLoaded', () => progressBar.style.width = '66%');
+        webView.addEventListener('MSWebViewDOMContentLoaded', () => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 66%, rgba(0,0,0,0) 66%, rgba(0,0,0,0) 100%)');
 
-        webView.addEventListener('MSWebViewNavigationCompleted', () => progressBar.style.width = '100%');
+        webView.addEventListener('MSWebViewNavigationCompleted', () => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 100%, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%)');
 
         webView.addEventListener('MSWebViewNewWindowRequested', event => {
             event.preventDefault();
@@ -168,13 +177,11 @@ window.onload = () => {
             var applicationView = Windows.UI.ViewManagement.ApplicationView.getForCurrentView();
             if (webView.containsFullScreenElement) {
                 tabsBar.style.display = 'none';
-                progressBar.style.display = 'none';
                 frequencyBar.style.display = 'none';
                 navigationBar.style.display = 'none';
                 applicationView.tryEnterFullScreenMode();
             } else {
                 tabsBar.style.display = '';
-                progressBar.style.display = '';
                 frequencyBar.style.display = '';
                 navigationBar.style.display = '';
                 applicationView.exitFullScreenMode();

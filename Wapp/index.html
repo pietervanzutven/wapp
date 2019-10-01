@@ -10,12 +10,26 @@
             flex-direction: column;
         }
 
+        a {
+            text-decoration: none;
+            color: black;
+        }
+
+            a.button {
+                width: 21px;
+                float: left;
+                margin-top: -2px;
+                text-align: center;
+                font-weight: 900;
+                font-size: 20px;
+            }
+
         #tabsBar {
             width: 100%;
             height: 21px;
         }
 
-        #tabLabels {
+        #headers {
             display: table;
             table-layout: fixed;
             width: calc(100% - 42px);
@@ -23,20 +37,29 @@
             float: left;
         }
 
-        .tab {
-            display: table-cell;
-            height: 100%;
+        #labels {
+            display: table-row;
+            height: calc(100% - 3px);
         }
 
-        a.tab {
+        #progresses {
+            display: table-row;
+            height: 3px;
+        }
+
+        a.label {
+            display: table-cell;
             text-align: center;
-            color: black;
-            text-decoration: none;
             overflow: hidden;
             white-space: nowrap;
             border-left: 1px solid black;
             border-right: 9px solid white;
             padding-left: 9px;
+        }
+
+        .progress {
+            display: table-cell;
+            background-image: linear-gradient(90deg, Highlight 0%, Highlight 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%);
         }
 
         #webViewBar {
@@ -48,12 +71,6 @@
             width: 100%;
             height: 100%;
             background-color: black;
-        }
-
-        #progressBar {
-            background-color: Highlight;
-            width: 100%;
-            height: 3px;
         }
 
         #frequencyBar {
@@ -109,27 +126,16 @@
             width: calc(100% - 42px);
             float: left;
         }
-
-        a {
-            text-decoration: none;
-        }
-
-            a.button {
-                width: 21px;
-                float: left;
-                margin-top: -2px;
-                text-align: center;
-                font-weight: 900;
-                color: black;
-                font-size: 20px;
-            }
     </style>
 
 </head>
 <body>
     <script type="text/javascript" src="js/main.js"></script>
     <div id="tabsBar">
-        <div id="tabLabels"></div>
+        <div id="headers">
+            <div id="labels"></div>
+            <div id="progresses"></div>
+        </div>
         <a class="button" id="addTab" href="#">+</a>
         <a class="button" id="viewFilter" href="#">⦠</a>
     </div>
