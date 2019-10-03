@@ -148,17 +148,16 @@ window.onload = () => {
         var webView = document.createElement('x-ms-webview');
         webView.className = 'webView';
 
-        webView.addEventListener('MSWebViewNavigationStarting', event => {
-            label === activeTab.label && (addressField.value = event.uri || 'about:blank');
-            progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%)';
-        });
+        webView.addEventListener('MSWebViewNavigationStarting', event => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%)');
 
         webView.addEventListener('MSWebViewContentLoading', event => {
-            var csp = JSON.stringify(cspList[Windows.Foundation.Uri(webView.src || 'about:blank').domain] || "default-src 'none';");
+            var src = webView.src;
+            var csp = JSON.stringify(cspList[Windows.Foundation.Uri(src || 'about:blank').domain] || "default-src 'none';");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
             webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + (e.blockedURI || (e.lineNumber ? "\'unsafe-inline\'" : "\'unsafe-eval\'")) + ";"))').start();
             frequencyBar.innerHTML = '';
-            label.innerHTML = webView.documentTitle || webView.src;
+            label.innerHTML = webView.documentTitle || src;
+            label === activeTab.label && (addressField.value = src || 'about:blank')
             progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 33%, rgba(0,0,0,0) 33%, rgba(0,0,0,0) 100%)';
         });
 
