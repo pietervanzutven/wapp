@@ -152,7 +152,7 @@ window.onload = () => {
 
         webView.addEventListener('MSWebViewContentLoading', event => {
             var src = webView.src;
-            var csp = JSON.stringify(cspList[Windows.Foundation.Uri(src || 'about:blank').domain] || "default-src 'none';");
+            var csp = JSON.stringify(cspList[Windows.Foundation.Uri(src || 'about:blank').domain] || "default-src 'self';");
             webView.invokeScriptAsync('eval', 'var meta = document.createElement("meta");meta.httpEquiv = "Content-Security-Policy";meta.content = ' + csp + ';document.head.appendChild(meta);').start();
             webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + (e.blockedURI || (e.lineNumber ? "\'unsafe-inline\'" : "\'unsafe-eval\'")) + ";"))').start();
             frequencyBar.innerHTML = '';
@@ -209,7 +209,7 @@ window.onload = () => {
                 link.appendChild(div);
                 violationField.appendChild(link);
             })
-            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'none';").replace(/;/g, ';\n');
+            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'self';").replace(/;/g, ';\n');
             filter.style.display = 'block';
         };
         op.start();
