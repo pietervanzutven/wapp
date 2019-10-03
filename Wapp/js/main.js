@@ -187,6 +187,8 @@ window.onload = () => {
             }
         });
 
+        webView.addEventListener('MSWebViewLongRunningScriptDetected', event => event.stopPageScriptExecution = true);
+
         return webView;
     }
 
