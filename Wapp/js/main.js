@@ -189,6 +189,17 @@ window.onload = () => {
 
         webView.addEventListener('MSWebViewLongRunningScriptDetected', event => event.stopPageScriptExecution = true);
 
+        webView.addEventListener('MSWebViewPermissionRequested', event => {
+            event.permissionRequest.defer();
+            var dialog = Windows.UI.Popups.MessageDialog('Allow website ' + event.permissionRequest.type + ' permission?');
+            dialog.title = 'Permission requested';
+            dialog.commands.append(Windows.UI.Popups.UICommand('Yes', () => webView.getDeferredPermissionRequestById(event.permissionRequest.id).allow()));
+            dialog.commands.append(Windows.UI.Popups.UICommand('No', () => webView.getDeferredPermissionRequestById(event.permissionRequest.id).deny()));
+            dialog.defaultCommandIndex = 1;
+            dialog.cancelCommandIndex = 1;
+            dialog.showAsync();
+        });
+
         return webView;
     }
 
