@@ -241,6 +241,8 @@ window.onload = () => {
         browse(addressField.value);
     });
 
+    addressBar.addEventListener('contextmenu', () => activeTab.webView.refresh());
+
     addressField.addEventListener('focus', event => setTimeout(event.target.select.bind(event.target), 0));
 
     addressField.addEventListener('keydown', event => {
