@@ -228,10 +228,10 @@ window.onload = () => {
 
     saveFilter.addEventListener('click', () => {
         cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/\n/g, '');
+        filter.style.display = 'none';
+        activeTab.webView.refresh();
         Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
-            .then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(cspList))
-                .then(() => filter.style.display = 'none')
-            );
+            .then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(cspList)));
     });
 
     closeFilter.addEventListener('click', () => filter.style.display = 'none');
