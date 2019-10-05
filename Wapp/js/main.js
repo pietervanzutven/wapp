@@ -148,7 +148,7 @@ window.onload = () => {
         var webView = document.createElement('x-ms-webview');
         webView.className = 'webView';
 
-        webView.addEventListener('MSWebViewNavigationStarting', event => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 0%, rgba(0,0,0,0) 0%, rgba(0,0,0,0) 100%)');
+        webView.addEventListener('MSWebViewNavigationStarting', event => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 1%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 100%)');
 
         webView.addEventListener('MSWebViewContentLoading', event => {
             var src = webView.src;
@@ -158,12 +158,12 @@ window.onload = () => {
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || src;
             label === activeTab.label && (addressField.value = src || 'about:blank')
-            progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 33%, rgba(0,0,0,0) 33%, rgba(0,0,0,0) 100%)';
+            progress.style.backgroundImage = progress.style.backgroundImage.replace('1%', '33%');
         });
 
-        webView.addEventListener('MSWebViewDOMContentLoaded', () => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 66%, rgba(0,0,0,0) 66%, rgba(0,0,0,0) 100%)');
+        webView.addEventListener('MSWebViewDOMContentLoaded', () => progress.style.backgroundImage = progress.style.backgroundImage.replace('33%', '66%'));
 
-        webView.addEventListener('MSWebViewNavigationCompleted', () => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 100%, rgba(0,0,0,0) 100%, rgba(0,0,0,0) 100%)');
+        webView.addEventListener('MSWebViewNavigationCompleted', () => progress.style.backgroundImage = progress.style.backgroundImage.replace('66%', '100%'));
 
         webView.addEventListener('MSWebViewNewWindowRequested', event => {
             event.preventDefault();
