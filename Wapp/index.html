@@ -24,6 +24,19 @@
                 font-size: 20px;
             }
 
+            a.label {
+                display: table-cell;
+                text-align: center;
+                overflow: hidden;
+                white-space: nowrap;
+                border-right: 9px solid white;
+                padding-left: 9px;
+            }
+
+                a.label:not(:first-child) {
+                    border-left: 1px solid black;
+                }
+
         #tabsBar {
             width: 100%;
             height: 21px;
@@ -45,16 +58,6 @@
         #progresses {
             display: table-row;
             height: 3px;
-        }
-
-        a.label {
-            display: table-cell;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            border-left: 1px solid black;
-            border-right: 9px solid white;
-            padding-left: 9px;
         }
 
         .progress {
