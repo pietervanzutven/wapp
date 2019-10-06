@@ -120,6 +120,7 @@ window.onload = () => {
         tab.label.addEventListener('contextmenu', () => {
             if (tabs.length > 1) {
                 tab.label.remove();
+                tab.progress.remove();
                 tabs.splice(tabs.indexOf(tab), 1);
                 activateTab(tabs[0]);
             }
