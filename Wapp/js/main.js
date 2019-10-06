@@ -163,7 +163,7 @@ window.onload = () => {
 
         webView.addEventListener('MSWebViewDOMContentLoaded', () => progress.style.backgroundImage = progress.style.backgroundImage.replace('33%', '66%'));
 
-        webView.addEventListener('MSWebViewNavigationCompleted', () => progress.style.backgroundImage = progress.style.backgroundImage.replace('66%', '100%'));
+        webView.addEventListener('MSWebViewNavigationCompleted', () => progress.style.backgroundImage = progress.style.backgroundImage.replace('33%', '100%').replace('66%', '100%'));
 
         webView.addEventListener('MSWebViewNewWindowRequested', event => {
             event.preventDefault();
