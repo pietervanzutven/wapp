@@ -216,20 +216,20 @@ window.onload = () => {
                 var link = document.createElement('a');
                 var div = document.createElement('div');
                 link.href = '#';
-                link.addEventListener('click', () => filterField.value += violation + '\n');
+                link.addEventListener('click', () => filterField.value += violation.replace(/ /g,'\n\t') + '\n');
                 div.className = 'frequencyItem';
                 div.innerHTML = violation;
                 link.appendChild(div);
                 violationField.appendChild(link);
             })
-            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'self';").replace(/;/g, ';\n');
+            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'self';").replace(/;/g, ';\n').replace(/ /g,'\n\t');
             filter.style.display = 'block';
         };
         op.start();
     });
 
     saveFilter.addEventListener('click', () => {
-        cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/\n/g, '');
+        cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/;\n\t/g, ' ').replace(/\n\t/g, ' ').replace(/\n/g, '');
         filter.style.display = 'none';
         activeTab.webView.refresh();
         Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
