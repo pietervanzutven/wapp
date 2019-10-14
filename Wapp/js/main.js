@@ -52,8 +52,6 @@ window.onload = () => {
         backButton.click();
     };
 
-    Windows.UI.WebUI.WebUIApplication.addEventListener('enteredbackground', () => MSApp.clearTemporaryWebDataAsync());
-
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
     if (addressField.hasFocus) {
         addressField.selectionStart = 0;
