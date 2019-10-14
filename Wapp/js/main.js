@@ -63,21 +63,12 @@ window.onload = () => {
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('hiding', () => frequencyBar.innerHTML = '');
 
-    var extendedExecution = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionSession();
-    extendedExecution.reason = Windows.ApplicationModel.ExtendedExecution.ExtendedExecutionReason.unspecified;
-    extendedExecution.addEventListener('revoked', () => activeTab.webView.stop());
-
     function loadFilter(file) {
         Windows.Storage.FileIO.readTextAsync(file).then(text => cspList = JSON.parse(text));
     }
 
     function saveFrequency() {
         Windows.Storage.ApplicationData.current.localFolder.createFileAsync('frequent.json', Windows.Storage.CreationCollisionOption.replaceExisting).then(file => Windows.Storage.FileIO.writeTextAsync(file, JSON.stringify(frequencyList)));
-    }
-
-    function callExtended(callback) {
-        extendedExecution.close();
-        extendedExecution.requestExtensionAsync().then(() => callback());
     }
 
     function browse(url) {
@@ -93,11 +84,7 @@ window.onload = () => {
         else {
             url = 'https://duckduckgo.com/?q=' + url.replace(/ /g, '%20');
         }
-        navigate(url);
-    }
-
-    function navigate(url) {
-        callExtended(() => activeTab.webView.navigate(url));
+        activeTab.webView.navigate(url);
     }
 
     function activateTab(tab) {
@@ -168,7 +155,7 @@ window.onload = () => {
 
         webView.addEventListener('MSWebViewNewWindowRequested', event => {
             event.preventDefault();
-            navigate(event.uri);
+            activeTab.webView.navigate(event.uri);
         });
 
         webView.addEventListener('MSWebViewUnviewableContentIdentified', event => Windows.System.Launcher.launchUriAsync(Windows.Foundation.Uri(event.uri)));
@@ -301,12 +288,12 @@ window.onload = () => {
     });
 
     backButton.addEventListener('click', () => {
-        callExtended(() => activeTab.webView.goBack());
+        activeTab.webView.goBack();
         return false;
     });
 
     forwardButton.addEventListener('click', () => {
-        callExtended(() => activeTab.webView.goForward());
+        activeTab.webView.goForward();
         return false;
     });
 
