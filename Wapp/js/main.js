@@ -216,7 +216,10 @@ window.onload = () => {
                 var link = document.createElement('a');
                 var div = document.createElement('div');
                 link.href = '#';
-                link.addEventListener('click', () => filterField.value += violation.replace(/ /g,'\n\t') + '\n');
+                link.addEventListener('click', () => {
+                    var details = violation.split(' ');
+                    filterField.value = filterField.value.indexOf(details[0]) > 0 ? filterField.value.replace(details[0], details[0] + '\n\t' + details[1]) : filterField.value + violation.replace(/ /g, '\n\t') + '\n';
+                });
                 div.className = 'frequencyItem';
                 div.innerHTML = violation;
                 link.appendChild(div);
