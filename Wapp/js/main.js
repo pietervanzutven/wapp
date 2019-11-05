@@ -208,21 +208,21 @@ window.onload = () => {
                 link.href = '#';
                 link.addEventListener('click', () => {
                     var details = violation.split(' ');
-                    filterField.value = filterField.value.indexOf(details[0]) > 0 ? filterField.value.replace(details[0], details[0] + '\n\t' + details[1]) : filterField.value + violation.replace(/ /g, '\n\t') + '\n';
+                    filterField.value = filterField.value.indexOf(details[0]) > 0 ? filterField.value.replace(details[0], details[0] + '\n   ' + details[1]) : filterField.value + violation.replace(/ /g, '\n   ') + '\n';
                 });
                 div.className = 'frequencyItem';
                 div.innerHTML = violation;
                 link.appendChild(div);
                 violationField.appendChild(link);
             })
-            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'self';").replace(/;/g, ';\n').replace(/ /g,'\n\t');
+            filterField.value = (cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] || "default-src 'self';").replace(/;/g, ';\n').replace(/ /g,'\n   ');
             filter.style.display = 'block';
         };
         op.start();
     });
 
     saveFilter.addEventListener('click', () => {
-        cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/;\n\t/g, ' ').replace(/\n\t/g, ' ').replace(/\n/g, '');
+        cspList[Windows.Foundation.Uri(activeTab.webView.src).domain] = filterField.value.replace(/;\n   /g, ' ').replace(/\n   /g, ' ').replace(/\n/g, '');
         filter.style.display = 'none';
         activeTab.webView.refresh();
         Windows.Storage.ApplicationData.current.localFolder.getFileAsync('filterlist.txt')
