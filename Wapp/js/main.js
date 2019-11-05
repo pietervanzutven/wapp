@@ -48,8 +48,13 @@ window.onload = () => {
     var currentView = Windows.UI.Core.SystemNavigationManager.getForCurrentView();
     currentView.appViewBackButtonVisibility = Windows.UI.Core.AppViewBackButtonVisibility.visible;
     currentView.onbackrequested = event => {
-        event.detail[0].handled = activeTab.webView.canGoBack;
-        backButton.click();
+        if (filter.style.display === 'block') {
+            event.detail[0].handled = true;
+            closeFilter.click();
+        } else {
+            event.detail[0].handled = activeTab.webView.canGoBack;
+            backButton.click();
+        }
     };
 
     Windows.UI.ViewManagement.InputPane.getForCurrentView().addEventListener('showing', () => {
