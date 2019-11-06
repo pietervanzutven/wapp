@@ -139,7 +139,10 @@ window.onload = () => {
         var webView = document.createElement('x-ms-webview');
         webView.className = 'webView';
 
-        webView.addEventListener('MSWebViewNavigationStarting', event => progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 1%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 100%)');
+        webView.addEventListener('MSWebViewNavigationStarting', event => {
+            progress.style.backgroundImage = 'linear-gradient(90deg, Highlight 0%, Highlight 1%, rgba(0,0,0,0) 1%, rgba(0,0,0,0) 100%)';
+            label === activeTab.label && (addressField.value = event.uri || 'about:blank');
+        });
 
         webView.addEventListener('MSWebViewContentLoading', event => {
             var src = webView.src;
@@ -148,7 +151,6 @@ window.onload = () => {
             webView.invokeScriptAsync('eval', 'window.violations = [];document.addEventListener("securitypolicyviolation", e => window.violations.push(e.effectiveDirective + " " + (e.blockedURI || (e.lineNumber ? "\'unsafe-inline\'" : "\'unsafe-eval\'")) + ";"))').start();
             frequencyBar.innerHTML = '';
             label.innerHTML = webView.documentTitle || src;
-            label === activeTab.label && (addressField.value = src || 'about:blank')
             progress.style.backgroundImage = progress.style.backgroundImage.replace('1%', '33%');
         });
 
