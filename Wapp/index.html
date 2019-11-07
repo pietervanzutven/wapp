@@ -5,11 +5,6 @@
     <title>Wapp</title>
 
     <style>
-        body {
-            display: flex;
-            flex-direction: column;
-        }
-
         a {
             text-decoration: none;
             color: black;
@@ -67,7 +62,7 @@
 
         #webViewBar {
             width: 100%;
-            flex-grow: 1;
+            height: calc(100% - 42px);
         }
 
         .webView {
@@ -77,6 +72,9 @@
         }
 
         #frequencyBar {
+            position: absolute;
+            bottom: 21px;
+            left: 0px;
             width: 100%;
             height: auto;
             max-height: 50%;
@@ -87,6 +85,7 @@
         .frequencyItem {
             white-space: nowrap;
             color: black;
+            background-color: white;
         }
 
         #navigationBar {
