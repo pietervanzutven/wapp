@@ -216,7 +216,7 @@ window.onload = () => {
                 link.href = '#';
                 link.addEventListener('click', () => {
                     var details = violation.split(' ');
-                    filterField.value = filterField.value.indexOf(details[0]) > 0 ? filterField.value.replace(details[0], details[0] + '\n   ' + details[1]) : filterField.value + violation.replace(/ /g, '\n   ') + '\n';
+                    filterField.value = filterField.value.includes(details[0]) ? filterField.value.replace(details[0], details[0] + '\n   ' + details[1]) : filterField.value + violation.replace(/ /g, '\n   ') + '\n';
                 });
                 div.className = 'frequencyItem';
                 div.innerHTML = violation;
