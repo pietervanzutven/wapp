@@ -180,7 +180,13 @@ window.onload = () => {
             }
         });
 
-        webView.addEventListener('MSWebViewLongRunningScriptDetected', event => event.stopPageScriptExecution = true);
+        webView.addEventListener('MSWebViewLongRunningScriptDetected', event => {
+            if (!cspList[Windows.Foundation.Uri(event.srcElement.src).domain].includes('long-running-script'))
+            {
+                event.stopPageScriptExecution = true;
+                webView.invokeScriptAsync('eval', 'window.violations.push("default-src \'long-running-script\';")').start();
+            }
+        });
 
         webView.addEventListener('MSWebViewPermissionRequested', event => {
             event.permissionRequest.defer();
