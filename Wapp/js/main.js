@@ -210,7 +210,7 @@ window.onload = () => {
             violationField.innerHTML = '';
             var violations = [...new Set((event.target.result || '').split(','))];
             violations.forEach(violation => {
-                violation = violation.replace('data', 'data:').replace('blob', 'blob:').replace('mediastream', 'mediastream:').replace('filesystem', 'filesystem:');
+                violation = violation.replace(' data;', ' data:;').replace(' blob;', ' blob:;').replace(' mediastream;', ' mediastream:;').replace(' filesystem;', ' filesystem:;');
                 var link = document.createElement('a');
                 var div = document.createElement('div');
                 link.href = '#';
