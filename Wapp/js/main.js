@@ -171,11 +171,13 @@ window.onload = () => {
                 tabsBar.style.display = 'none';
                 frequencyBar.style.display = 'none';
                 navigationBar.style.display = 'none';
+                webViewBar.style.height = '100%';
                 applicationView.tryEnterFullScreenMode();
             } else {
                 tabsBar.style.display = '';
                 frequencyBar.style.display = '';
                 navigationBar.style.display = '';
+                webViewBar.style.height = 'calc(100% - 46px)';
                 applicationView.exitFullScreenMode();
             }
         });
